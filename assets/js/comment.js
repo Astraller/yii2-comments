@@ -85,7 +85,8 @@
          * where
          *  - event: an Event object.
          */
-        afterReply: 'afterReply'
+        afterReply: 'afterReply',
+        commentUpdate: 'commentUpdate'
     };
 
     var commentData = {};
@@ -111,6 +112,12 @@
                 $comment.on('click.comment', '[data-action="reply"]', eventParams, reply);
                 $comment.on('click.comment', '[data-action="cancel-reply"]', eventParams, cancelReply);
                 $comment.on('click.comment', '[data-action="delete"]', eventParams, deleteComment);
+                $comment.on('update.comment', '[data-action="update"]', eventParams, updateComments);
+                if(settings.autoReload > 0){
+                    setInterval(() => {
+                        $(this).trigger($.Event(events.commentUpdate));
+                    }, autoReload);
+                }
             });
         },
         data: function () {
@@ -119,6 +126,14 @@
         }
     };
 
+    /**
+     * Update comments list
+     */
+    function updateComments(){
+        var settings = commentData[params.data.wrapperSelector].settings;
+        var pjaxSettings = $.extend({container: settings.pjaxContainerId}, settings.pjaxSettings);
+        $.pjax(pjaxSettings);
+    }
 
     /**
      * Create a comment

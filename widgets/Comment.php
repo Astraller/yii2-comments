@@ -78,6 +78,11 @@ class Comment extends Widget
     public $clientOptions = [];
 
     /**
+     * @var int auto reload comments timeout, if 0 - disabled
+     */
+    public $autoReload = 0;
+
+    /**
      * @var string hash(crc32) from class name of the widget model
      */
     protected $entity;
@@ -187,6 +192,7 @@ class Comment extends Widget
     {
         $this->clientOptions['pjaxContainerId'] = '#' . $this->pjaxContainerId;
         $this->clientOptions['formSelector'] = '#' . $this->formId;
+        $this->clientOptions['autoReload'] = $this->autoReload;
 
         return Json::encode($this->clientOptions);
     }
